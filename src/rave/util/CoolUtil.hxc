@@ -3,8 +3,6 @@ package rave.util;
 import funkin.data.quickpanel.PanelRegistry;
 import funkin.ui.quickpanel.PanelEntry;
 
-using StringTools;
-
 class CoolUtil
 {
 	public static function numberArray(max:Int, ?min:Int = 0):Array<Int>
@@ -40,5 +38,30 @@ class CoolUtil
 		}
 
 		trace(PanelRegistry.instance.listPanelEntries(panel));
+	}
+
+	public static function listFilesInPath(path:String, suffix:String = '.json', ?blacklist:Array<String>, nested:Bool = false):Array<String>
+	{
+		var queryPath:String = 'assets/${path}';
+		var assets:Array<String> = Assets.list();
+
+		var results:Array<String> = [];
+		for (textPath in assets)
+		{
+			// Filter matching assets
+			if (!StringTools.startsWith(textPath, queryPath) || !StringTools.endsWith(textPath, suffix)) continue;
+
+			// Isolate raw path
+			var pathNoPrefix:String = textPath.substring(queryPath.length, textPath.length - suffix.length);
+			var id:String = nested ? pathNoPrefix.split('/')[0] : pathNoPrefix;
+
+			if (nested && !StringTools.endsWith(textPath, '$id$suffix')) continue;
+
+			if (blacklist != null && blacklist.contains(id)) continue;
+
+			if (!results.contains(id)) results.push(id);
+		}
+
+		return results;
 	}
 }

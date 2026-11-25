@@ -2,6 +2,7 @@ package rave.ui.main;
 
 import funkin.ui.MusicBeatState;
 import funkin.assets.Assets;
+import funkin.assets.Paths;
 import flixel.addons.display.FlxBackdrop;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
@@ -15,29 +16,27 @@ class RaveMainState extends MusicBeatState
 {
 	public static function queryAssets(type)
 	{
-		var ext:String = switch (type)
+		var ext:String = null;
+
+		switch (type)
 		{
 			case 'IMAGE':
-				'.png';
+				ext = '.png';
 			default:
-				null;
 		}
 
 		if (ext == null) return [];
 
 		var paths = [
-			'assets/ui/rave/main-menu',
-			'assets/ui/rave/main-menu/art',
-			'assets/ui/rave/main-menu/SynSun/scrolltext',
+			'ui/rave/main-menu',
+			'ui/rave/main-menu/art',
+			'ui/rave/main-menu/SynSun/scrolltext',
 		];
-		var result = [];
+		var results = [];
 
-		for (path in paths)
-		{
-			for (shit in Assets.listDataFilesInPath(path, ext)) results.append(Paths.image('$path/$shit'));
-		}
+		for (path in paths) for (shit in CoolUtil.listFilesInPath(path, ext)) results.push(Paths.image('$path/$shit'));
 
-		return result;
+		return results;
 	}
 
 	var backdrop:FlxBackdrop;
@@ -116,7 +115,7 @@ class RaveMainState extends MusicBeatState
 		var isLooping = ['idle', 'phone'];
 
 		sun = new FlxSprite(730, -4);
-		sun.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Sundried');
+		sun.frames = Assets.getSparrowAtlas(Paths.image('ui/rave/main-menu/SynSun/Sundried'));
 
 		for (animation => indices in animations) sun.animation.addByIndices(animation, 'SD All in One', indices, '', 24, isLooping.contains(animation));
 
@@ -143,7 +142,7 @@ class RaveMainState extends MusicBeatState
 		isLooping = ['Bored'];
 
 		var syn = new FlxSprite(720, 133);
-		syn.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Synthetic');
+		syn.frames = Assets.getSparrowAtlas(Paths.image('ui/rave/main-menu/SynSun/Synthetic'));
 
 		for (animation => indices in animations) syn.animation.addByIndices(animation, 'Syn All In One', indices, '', 24, isLooping.contains(animation));
 
@@ -161,7 +160,7 @@ class RaveMainState extends MusicBeatState
 
 		var list = ['crashlog', 'mods', 'exit-mod'];
 
-		if (funkin.util.FileUtil.directoryExists('mods/flavor-rave-v-slice/.git'))
+		if (RaveGlobal.isDebugMode)
 		{
 			list.insert(0, 'chartEditor');
 			list.insert(1, 'cameraEditor');
