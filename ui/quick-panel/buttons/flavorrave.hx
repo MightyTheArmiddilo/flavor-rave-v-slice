@@ -7,7 +7,7 @@ import funkin.ui.transition.Transition.TransitionType;
 import funkin.ui.quickpanel.QuickPanelState;
 import funkin.ui.quickpanel.PanelActions;
 
-class FunkbucksShopPanelEntry extends PanelEntry
+class FlavorRavePanelEntry extends PanelEntry
 {
   public function new()
   {
