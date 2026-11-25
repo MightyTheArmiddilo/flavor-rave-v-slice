@@ -7,15 +7,6 @@ import flixel.util.FlxTimer;
 import flixel.math.FlxMath;
 import funkin.ui.transition.loading.ThrobberLoadingState;
 import funkin.ui.transition.progress.FunkinProgressBar;
-import flixel.graphics.FlxGraphic;
-import flixel.util.FlxColor;
-import funkin.assets.Assets;
-import funkin.assets.FunkinAssetCache;
-import lime.app.Future;
-import openfl.media.Sound;
-import lime.app.Promises;
-
-import rave.util.RaveAssetUtil;
 
 class RaveTransition extends ThrobberLoadingState
 {
@@ -65,6 +56,7 @@ class RaveTransition extends ThrobberLoadingState
 
 	override public function onFullyComplete():Void
 	{
+		currentProgress = 100;
 		updateText();
 
 		super.onFullyComplete();
@@ -72,59 +64,6 @@ class RaveTransition extends ThrobberLoadingState
 
 	public function updateText()
 	{
-		// if (loadingText != null) loadingText.text = '${FlxMath.roundDecimal(currentProgress * 100, 2)}% Complete';
-	}
-
-	override function loadGraphics():Void
-	{
-		if (transitionCancelled) return;
-		trace('[LOADING] Loading graphics...');
-
-		// Get the list of assets needed for this state,
-		// plus the assets that should always stay loaded across states.
-		var graphicsToLoad:Array<AssetPath> = params.assetQuery == null ? [] : params.assetQuery('IMAGE');
-		if (graphicsToLoad.length == 0)
-		{
-			// Nothing to load!
-			loadingStagesDone += 1;
-			loadSounds();
-			return;
-		}
-
-		// trace('[LOADING] Created promise to cache ${graphicsToLoad.length} total graphics.')
-		var future:Future<Array<Future<String>>> = RaveAssetUtil.cacheAllFlxGraphics(graphicsToLoad);
-
-		future.onProgress(this.onProgress);
-		future.onError(this.onError);
-		future.onComplete((loadedGraphics:Array<Future<String>>) ->
-		{
-			if (transitionCancelled) return;
-			// trace('[LOADING] Finished loading graphics, counting results...')
-			var success:Int = 0;
-			var error:Int = 0;
-			for (loadedGraphic in loadedGraphics)
-			{
-				if (loadedGraphic.isError)
-				{
-					trace('[LOADING] Error loading graphic: ${loadedGraphic.error}');
-					error++;
-				}
-				else if (!loadedGraphic.isComplete)
-				{
-					trace('HUH? Asset loading is not complete...');
-				}
-				else
-				{
-					success++;
-				}
-
-				trace(loadedGraphic.value);
-			}
-
-			trace('[LOADING] Finished loading ${success}/${success + error} graphics.');
-
-			loadingStagesDone += 1;
-			loadSounds();
-		});
+		if (loadingText != null) loadingText.text = '${FlxMath.roundDecimal(currentProgress * 100, 2)}% Complete';
 	}
 }
