@@ -11,6 +11,7 @@ import rave.util.CoolUtil;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
 import funkin.util.InputUtil;
+import funkin.group.FunkinGroup;
 
 class RaveMainState extends MusicBeatState
 {
@@ -182,5 +183,25 @@ class RaveMainState extends MusicBeatState
 		super.destroy();
 
 		CoolUtil.removeCustomSidebarPanels('rave');
+	}
+}
+
+class MMenuItem extends FunkinGroup
+{
+	var song:String;
+	var bg:FlxSprite;
+	var text:FlxSprite;
+
+	public var name:String;
+
+	public function new(x:Float = 0, y:Float = 0, item:String)
+	{
+		super(x, y);
+
+		name = item;
+
+		bg = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/buttons/${item}back').toString());
+		bg.antialiasing = false;
+		add(bg);
 	}
 }
