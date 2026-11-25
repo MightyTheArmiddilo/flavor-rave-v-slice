@@ -1,0 +1,9 @@
+{
+    "version": "1.0.0",
+    "text": "Flavor Rave",
+    "icon": "online",
+    "description": "Open Flavor Rave!",
+    "action": "none",
+    "panel": "mainmenu",
+    "order": 6
+}

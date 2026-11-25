@@ -1,5 +1,60 @@
 package rave.ui.main;
 
 import funkin.ui.MusicBeatState;
+import funkin.assets.Assets;
 
-class RaveMainState extends MusicBeatState{}
+import flixel.addons.display.FlxBackdrop;
+import flixel.FlxSprite;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
+
+class RaveMainState extends MusicBeatState
+{
+    public static function queryAssets(type)
+    {
+        var shits:Array<String> = Assets.listDataFilesInPath('assets/ui/rave/main-menu', '.png');
+        var result = [];
+        switch(type)
+        {
+            case 'IMAGE':
+                for(shit in shits)
+                {
+                    results.append(Paths.image('ui/rave/main-menu/$shit'));
+                }
+        }
+        return result;
+    }
+
+    var backdrop:FlxBackdrop;
+    var border:FlxSprite;
+
+    override function create()
+    {
+        backdrop = new FlxBackdrop(Paths.image('ui/rave/main-menu/checkerboard').toString());
+        backdrop.velocity.set(-40,-40);
+        backdrop.antialiasing = false;
+        add(backdrop);
+
+        border = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/border').toString());
+        border.screenCenter();
+        border.antialiasing = false;
+        border.alpha = 0.001;
+        FlxTween.tween(border, {alpha : 1}, 0.5, {ease : FlxEase.sineOut});
+        add(border);
+
+        var scan:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/scanlines').toString());
+		scan.screenCenter();
+		scan.antialiasing = false;
+		add(scan);
+
+		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/BG').toString());
+		bg.screenCenter();
+		bg.antialiasing = false;
+		add(bg);
+		
+		var deskbg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/desk').toString());
+		deskbg.screenCenter();
+		deskbg.antialiasing = false;
+		add(deskbg);
+    }
+}
