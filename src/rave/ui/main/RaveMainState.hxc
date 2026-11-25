@@ -1,0 +1,5 @@
+package rave.ui.main;
+
+import funkin.ui.MusicBeatState;
+
+class RaveMainState extends MusicBeatState{}
