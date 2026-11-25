@@ -56,13 +56,10 @@ class RaveTransition extends ThrobberLoadingState
 
 	override public function onFullyComplete():Void
 	{
-        currentProgress = 100;
+		currentProgress = 100;
 		updateText();
 
-		FlxTimer.wait(1, () ->
-		{
-			super.onFullyComplete();
-		});
+		super.onFullyComplete();
 	}
 
 	public function updateText()
