@@ -1,14 +1,40 @@
 package rave.util;
 
+import flixel.FlxG;
+import flixel.input.keyboard.FlxKey;
+import funkin.data.quickpanel.PanelRegistry;
+import funkin.ui.quickpanel.PanelEntry;
+import funkin.util.InputUtil;
+
 class CoolUtil
 {
-    static function numberArray(max:Int, ?min:Int = 0):Array<Int>
-    {
-        var result = [];
-        for(i in min...max)
-        {
-            result.push(i);
-        }
-        return result;
-    }
+	static function numberArray(max:Int, ?min:Int = 0):Array<Int>
+	{
+		var result = [];
+		for (i in min...max) result.push(i);
+		return result;
+	}
+
+	static function createSidebarPanelsBasedOnOGS(panel:String, wanted:Array<String>, ?debugEntries:Map<String, Int>)
+	{
+		// RAVE
+		if (debugEntries != null && InputUtil.allPressed([FlxKey.R, FlxKey.A, FlxKey.V, FlxKey.E,]))
+		{
+			for (entry => order in debugEntries) wanted.insert(order, entry);
+		}
+
+		@:privateAccess
+		for (entry => what in PanelRegistry.instance.entries)
+		{
+			if (!wanted.contains(entry)) continue;
+			if (PanelRegistry.instance.entries.exists('$panel-$entry')) continue;
+
+			var newEntry = new PanelEntry(entry);
+			newEntry._data.panel = panel;
+			newEntry._data.order = wanted.indexOf(entry);
+			PanelRegistry.instance.entries.set('$panel-$entry', newEntry);
+		}
+
+		trace(PanelRegistry.instance.listPanelEntries(panel));
+	}
 }
