@@ -6,7 +6,6 @@ import funkin.ui.transition.Transition;
 import funkin.ui.transition.Transition.TransitionType;
 import funkin.ui.quickpanel.QuickPanelState;
 import funkin.ui.quickpanel.PanelActions;
-import rave.util.CustomTransitionUtil;
 import rave.ui.transition.RaveTransition;
 
 class FlavorRavePanelEntry extends PanelEntry
@@ -19,10 +18,10 @@ class FlavorRavePanelEntry extends PanelEntry
 	override public function onAccept():Void
 	{
 		QuickPanelState.stopMusic();
-		CustomTransitionUtil.switchState(() -> new rave.ui.main.RaveMainState(), // at some point change this to title state
+		Transition.switchState(() -> new rave.ui.main.RaveMainState(), // at some point change this to title state
 			{
 				assetQuery: rave.ui.main.RaveMainState.queryAssets,
 				transition: TransitionType.Custom('rave.ui.transition.RaveTransition', FadeType.Fade("North"), FadeType.Fade("South"))
-			}, new RaveTransition());
+			});
 	}
 }
