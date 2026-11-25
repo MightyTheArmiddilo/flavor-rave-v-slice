@@ -20,7 +20,7 @@ class FlavorRavePanelEntry extends PanelEntry
     Transition.switchState(() -> new rave.ui.main.RaveMainState(), // at some point change this to title state
       {
         assetQuery: rave.ui.main.RaveMainState.queryAssets,
-        transition: TransitionType.BlackWithThrobber(FadeType.Fade("North"), FadeType.Fade("South"))
+        transition: TransitionType.Custom('RaveTransition', FadeType.Fade("North"), FadeType.Fade("South"))
       });
   }
 }
