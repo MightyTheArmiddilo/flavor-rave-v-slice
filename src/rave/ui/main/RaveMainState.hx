@@ -60,10 +60,10 @@ class RaveMainState extends MusicBeatState
 		['credits', 0xFFFF6FB0, 0xFF71E5FF]
 	];
 
+	public static var curSelected = 0;
+
 	override function create()
 	{
-		FlxG.mouse.visible = true;
-
 		backdrop = new FlxBackdrop(Paths.image('ui/rave/main-menu/checkerboard').toString());
 		backdrop.velocity.set(-40, -40);
 		backdrop.antialiasing = false;
@@ -201,6 +201,48 @@ class RaveMainState extends MusicBeatState
 		#if FEATURE_DEBUG_MENU
 		funkin.util.plugins.SidePanelPlugin.requestPanel('rave', true);
 		#end
+	}
+
+	override function update(elapsed:Float)
+	{
+		if (controls.UI_UP_P)
+		{
+			changeItem(-1);
+		}
+		if (controls.UI_DOWN_P)
+		{
+			changeItem(1);
+		}
+	}
+
+	function changeItem(dir:Int = 0)
+	{
+		curSelected += dir;
+		curSelected = Math.min(Math.max(curSelected, 0), optionShit.length - 1);
+
+		menuItems.forEach(function(obj:MMenuItem)
+		{
+			FlxTween.cancelTweensOf(obj);
+			if (obj.ID == curSelected)
+			{
+				scrollText.loadGraphic(Paths.image('ui/rave/main-menu/SynSun/scrolltext/${obj.name}').toString());
+				FlxTween.tween(obj, {
+					x: 10
+				}, 0.25, {
+					ease: FlxEase.sineOut
+				});
+				obj.highlighted(true);
+			}
+			else
+			{
+				FlxTween.tween(obj, {
+					x: -20
+				}, 0.25, {
+					ease: FlxEase.sineOut
+				});
+				obj.highlighted(false);
+			}
+		});
 	}
 
 	override function destroy()
