@@ -14,6 +14,11 @@ import funkin.util.InputUtil;
 
 class RaveMainState extends MusicBeatState
 {
+	public static function queryPriorityAssets(type)
+	{
+		return [];
+	}
+
 	public static function queryAssets(type)
 	{
 		var ext:String = null;
