@@ -2,69 +2,84 @@ package rave.ui.main;
 
 import funkin.ui.MusicBeatState;
 import funkin.assets.Assets;
-
 import flixel.addons.display.FlxBackdrop;
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
-
 import rave.util.CoolUtil;
 
 class RaveMainState extends MusicBeatState
 {
-    public static function queryAssets(type)
-    {
-        var shits:Array<String> = Assets.listDataFilesInPath('assets/ui/rave/main-menu', '.png');
-        var artStuff:Array<String> = Assets.listDataFilesInPath('assets/ui/rave/main-menu/art', '.png');
-        var scrollTexts:Array<String> = Assets.listDataFilesInPath('assets/ui/rave/main-menu/SynSun/scrolltext', '.png');
-        var result = [];
-        switch(type)
-        {
-            case 'IMAGE':
-                for(shit in shits) results.append(Paths.image('ui/rave/main-menu/$shit'));
-                
-                for(art in artStuff) results.append(Paths.image('ui/rave/main-menu/art/$art'));
+	public static function queryAssets(type)
+	{
+		var ext:String = switch (type)
+		{
+			case 'IMAGE':
+				'.png';
+			default:
+				null;
+		}
 
-                for(text in scrollTexts) results.append(Paths.image('ui/rave/main-menu/SynSun/scrolltext/$text'));
-        }
-        return result;
-    }
+		if (ext == null) return [];
 
-    var backdrop:FlxBackdrop;
-    var border:FlxSprite;
-    var sun:FlxSprite;
-    var menuArt:FlxSprite;
-    var scrollText:FlxBackdrop;
-    var sidebar:FlxSprite;
+		var paths = [
+			'assets/ui/rave/main-menu',
+			'assets/ui/rave/main-menu/art',
+			'assets/ui/rave/main-menu/SynSun/scrolltext',
+		];
+		var result = [];
 
-    override function create()
-    {
-        FlxG.mouse.visible = true;
+		for (path in paths)
+		{
+			for (shit in Assets.listDataFilesInPath(path, ext)) results.append(Paths.image('$path/$shit'));
+		}
 
-        backdrop = new FlxBackdrop(Paths.image('ui/rave/main-menu/checkerboard').toString());
-        backdrop.velocity.set(-40,-40);
-        backdrop.antialiasing = false;
-        add(backdrop);
+		return result;
+	}
 
-        menuArt = new FlxSprite(1280, -56).loadGraphic(Paths.image('ui/rave/main-menu/art/story').toString()); //hook this up to curselected eventually
-        menuArt.antialiasing = false;
-        add(menuArt);
+	var backdrop:FlxBackdrop;
+	var border:FlxSprite;
+	var sun:FlxSprite;
+	var menuArt:FlxSprite;
+	var scrollText:FlxBackdrop;
+	var sidebar:FlxSprite;
 
-        scrollText = new FlxBackdrop(Paths.image('ui/rave/main-menu/SynSun/scrolltext/story').toString(), 0x01);
-        scrollText.setPosition(0, 400);
-        scrollText.velocity.set(-40, 0);
-        scrollText.antialiasing = false;
-        add(scrollText);
-        FlxTween.tween(scrollText, {y : 329}, 0.5, {ease : FlxEase.sineOut});
+	override function create()
+	{
+		FlxG.mouse.visible = true;
 
-        border = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/border').toString());
-        border.screenCenter();
-        border.antialiasing = false;
-        border.alpha = 0.001;
-        FlxTween.tween(border, {alpha : 1}, 0.5, {ease : FlxEase.sineOut});
-        add(border);
+		backdrop = new FlxBackdrop(Paths.image('ui/rave/main-menu/checkerboard').toString());
+		backdrop.velocity.set(-40, -40);
+		backdrop.antialiasing = false;
+		add(backdrop);
 
-        var scan:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/scanlines').toString());
+		menuArt = new FlxSprite(1280, -56).loadGraphic(Paths.image('ui/rave/main-menu/art/story').toString()); // hook this up to curselected eventually
+		menuArt.antialiasing = false;
+		add(menuArt);
+
+		scrollText = new FlxBackdrop(Paths.image('ui/rave/main-menu/SynSun/scrolltext/story').toString(), 0x01);
+		scrollText.setPosition(0, 400);
+		scrollText.velocity.set(-40, 0);
+		scrollText.antialiasing = false;
+		add(scrollText);
+		FlxTween.tween(scrollText, {
+			y: 329
+		}, 0.5, {
+			ease: FlxEase.sineOut
+		});
+
+		border = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/border').toString());
+		border.screenCenter();
+		border.antialiasing = false;
+		border.alpha = 0.001;
+		FlxTween.tween(border, {
+			alpha: 1
+		}, 0.5, {
+			ease: FlxEase.sineOut
+		});
+		add(border);
+
+		var scan:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/scanlines').toString());
 		scan.screenCenter();
 		scan.antialiasing = false;
 		add(scan);
@@ -73,71 +88,85 @@ class RaveMainState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = false;
 		add(bg);
-		
+
 		var deskbg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/desk').toString());
 		deskbg.screenCenter();
 		deskbg.antialiasing = false;
 		add(deskbg);
 
-        var animations:Map<String,Array<Int>> = [
-            'idle' => [0],
-            'greeting' => CoolUtil.numberArray(36,1),
-            'think' => CoolUtil.numberArray(55,37),
-            'exhale' => CoolUtil.numberArray(74,56),
-            'excited' => CoolUtil.numberArray(93,75),
-            'determined' => CoolUtil.numberArray(112,94),
-            'nervous' => CoolUtil.numberArray(131,113),
-            'blush' => CoolUtil.numberArray(150,132),
-            'sad' => CoolUtil.numberArray(169,151),
-            'happy' => CoolUtil.numberArray(188,170),
-            'laugh' => CoolUtil.numberArray(207,189),
-            'phone' => CoolUtil.numberArray(283,208),
-            'reset' => CoolUtil.numberArray(36,30),
-        ];
+		var animations:Map<String, Array<Int>> = [
+			'idle' => [0],
+			'greeting' => CoolUtil.numberArray(36, 1),
+			'think' => CoolUtil.numberArray(55, 37),
+			'exhale' => CoolUtil.numberArray(74, 56),
+			'excited' => CoolUtil.numberArray(93, 75),
+			'determined' => CoolUtil.numberArray(112, 94),
+			'nervous' => CoolUtil.numberArray(131, 113),
+			'blush' => CoolUtil.numberArray(150, 132),
+			'sad' => CoolUtil.numberArray(169, 151),
+			'happy' => CoolUtil.numberArray(188, 170),
+			'laugh' => CoolUtil.numberArray(207, 189),
+			'phone' => CoolUtil.numberArray(283, 208),
+			'reset' => CoolUtil.numberArray(36, 30),
+		];
 
-        var isLooping = ['idle', 'phone'];
+		var isLooping = ['idle', 'phone'];
 
-        sun = new FlxSprite(730, -4);
-        sun.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Sundried');
+		sun = new FlxSprite(730, -4);
+		sun.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Sundried');
 
-        for (animation => indices in animations)
-            sun.animation.addByIndices(animation, 'SD All in One', indices, '', 24, isLooping.contains(animation));
+		for (animation => indices in animations) sun.animation.addByIndices(animation, 'SD All in One', indices, '', 24, isLooping.contains(animation));
 
-        sun.antialiasing = false;
-        add(sun);
+		sun.antialiasing = false;
+		add(sun);
 
+		animations = [
+			"idle" => [0],
+			"greeting" => CoolUtil.numberArray(56, 0),
+			"idle_rand" => CoolUtil.numberArray(178, 57),
+			"happy" => CoolUtil.numberArray(31, 0),
+			"alert" => CoolUtil.numberArray(202, 179),
+			"upset" => CoolUtil.numberArray(231, 203),
+			"quiet" => CoolUtil.numberArray(269, 232),
+			"confused" => CoolUtil.numberArray(293, 270),
+			"hueh" => CoolUtil.numberArray(316, 294),
+			"p03" => CoolUtil.numberArray(339, 317),
+			"sad" => CoolUtil.numberArray(359, 340),
+			"search" => CoolUtil.numberArray(379, 360),
+			"Bored" => CoolUtil.numberArray(423, 380),
+			"reset" => CoolUtil.numberArray(56, 33)
+		];
 
-        animations = [
-            "idle" => [0],
-            "greeting" => CoolUtil.numberArray(56,0),
-            "idle_rand" => CoolUtil.numberArray(178, 57),
-            "happy" => CoolUtil.numberArray(31,0),
-            "alert" => CoolUtil.numberArray(202,179),
-            "upset" => CoolUtil.numberArray(231,203),
-            "quiet" => CoolUtil.numberArray(269,232),
-            "confused" => CoolUtil.numberArray(293, 270),
-            "hueh" => CoolUtil.numberArray(316,294),
-            "p03" => CoolUtil.numberArray(339, 317),
-            "sad" => CoolUtil.numberArray(359,340),
-            "search" => CoolUtil.numberArray(379, 360),
-            "Bored" => CoolUtil.numberArray(423, 380),
-            "reset" => CoolUtil.numberArray(56,33)
-        ];
+		isLooping = ['Bored'];
 
-        isLooping = ['Bored'];
+		var syn = new FlxSprite(720, 133);
+		syn.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Synthetic');
 
-        var syn = new FlxSprite(720,133);
-        syn.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Synthetic');
-
-        for(animation => indices in animations)
-            syn.animation.addByIndices(animation, 'Syn All In One', indices, '', 24, isLooping.contains(animation));
+		for (animation => indices in animations) syn.animation.addByIndices(animation, 'Syn All In One', indices, '', 24, isLooping.contains(animation));
 
 		syn.antialiasing = false;
 		add(syn);
 
-        sidebar = new FlxSprite(-2018).loadGraphic(Paths.image('ui/rave/main-menu/sidebar_full').toString());
-        sidebar.antialiasing = false;
-        add(sidebar);
-        FlxTween.tween(sidebar, {x : -1649}, 0.5, {ease : FlxEase.sineOut});
-    }
+		sidebar = new FlxSprite(-2018).loadGraphic(Paths.image('ui/rave/main-menu/sidebar_full').toString());
+		sidebar.antialiasing = false;
+		add(sidebar);
+		FlxTween.tween(sidebar, {
+			x: -1649
+		}, 0.5, {
+			ease: FlxEase.sineOut
+		});
+
+		CoolUtil.createSidebarPanelsBasedOnOGS('rave', ['crashlog', 'mods', 'exit-mod'], ['chartEditor' => 0, 'cameraEditor' => 1]);
+	
+		#if FEATURE_DEBUG_MENU
+		funkin.util.plugins.SidePanelPlugin.requestPanel('rave', true);
+		#end
+	}
+
+	override function destroy()
+	{
+		super.destroy();
+		
+		CoolUtil.removeCustomSidebarPanels('rave');
+	}
 }
