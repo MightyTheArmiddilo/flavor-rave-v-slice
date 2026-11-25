@@ -1,0 +1,14 @@
+package rave.util;
+
+class CoolUtil
+{
+    static function numberArray(max:Int, ?min:Int = 0):Array<Int>
+    {
+        var result = [];
+        for(i in min...max)
+        {
+            result.push(i);
+        }
+        return result;
+    }
+}

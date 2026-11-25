@@ -8,6 +8,8 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 
+import rave.util.CoolUtil;
+
 class RaveMainState extends MusicBeatState
 {
     public static function queryAssets(type)
@@ -27,6 +29,7 @@ class RaveMainState extends MusicBeatState
 
     var backdrop:FlxBackdrop;
     var border:FlxSprite;
+    var sun:FlxSprite;
 
     override function create()
     {
@@ -56,5 +59,32 @@ class RaveMainState extends MusicBeatState
 		deskbg.screenCenter();
 		deskbg.antialiasing = false;
 		add(deskbg);
+
+        var animations:Map<String,Array<Int>> = [
+            'idle' => [0],
+            'greeting' => CoolUtil.numberArray(36,1),
+            'think' => CoolUtil.numberArray(55,37),
+            'exhale' => CoolUtil.numberArray(74,56),
+            'excited' => CoolUtil.numberArray(93,75),
+            'determined' => CoolUtil.numberArray(112,94),
+            'nervous' => CoolUtil.numberArray(131,113),
+            'blush' => CoolUtil.numberArray(150,132),
+            'sad' => CoolUtil.numberArray(169,151),
+            'happy' => CoolUtil.numberArray(188,170),
+            'laugh' => CoolUtil.numberArray(207,189),
+            'phone' => CoolUtil.numberArray(283,208),
+            'reset' => CoolUtil.numberArray(36,30),
+        ];
+
+        var isLooping = ['idle', 'phone'];
+
+        sun = new FlxSprite(730, -4);
+        sun.frames = Paths.getSparrowAtlas('ui/rave/main-menu/SynSun/Sundried');
+
+        for (animation => indices in animations)
+            sun.animation.addByIndices(animation, 'SD All in One', indices, '', 24, isLooping.contains(animation));
+
+        sun.antialiasing = false;
+        add(sun);
     }
 }
