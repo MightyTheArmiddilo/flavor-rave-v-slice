@@ -8,14 +8,14 @@ import funkin.util.InputUtil;
 
 class CoolUtil
 {
-	static function numberArray(max:Int, ?min:Int = 0):Array<Int>
+	public static function numberArray(max:Int, ?min:Int = 0):Array<Int>
 	{
 		var result = [];
 		for (i in min...max) result.push(i);
 		return result;
 	}
 
-	static function createSidebarPanelsBasedOnOGS(panel:String, wanted:Array<String>, ?debugEntries:Map<String, Int>)
+	public static function createSidebarPanelsBasedOnOGS(panel:String, wanted:Array<String>, ?debugEntries:Map<String, Int>)
 	{
 		// RAVE
 		if (debugEntries != null && InputUtil.allPressed([FlxKey.R, FlxKey.A, FlxKey.V, FlxKey.E,]))
