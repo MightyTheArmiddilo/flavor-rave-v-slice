@@ -19,11 +19,14 @@ class RaveMainState extends MusicBeatState
 	public static function queryAssets(type)
 	{
 		var ext:String = null;
+		var results = [];
 
 		switch (type)
 		{
 			case 'IMAGE':
 				ext = '.png';
+				results.push(Paths.image('ui/rave/main-menu/SynSun/Sundried'));
+				results.push(Paths.image('ui/rave/main-menu/SynSun/Synthetic'));
 			default:
 		}
 
@@ -35,9 +38,8 @@ class RaveMainState extends MusicBeatState
 			'ui/rave/main-menu/SynSun/scrolltext',
 			'ui/rave/main-menu/buttons'
 		];
-		var results = [];
 
-		for (path in paths) for (shit in CoolUtil.listFilesInPath(path, ext)) results.push(Paths.image('$path/$shit'));
+		for (path in paths) for (shit in CoolUtil.listFilesInPath(path, ext)) results.push(Paths.image('$path/${shit.substr(1)}'));
 
 		return results;
 	}
