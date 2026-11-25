@@ -6,21 +6,23 @@ import funkin.ui.transition.Transition;
 import funkin.ui.transition.Transition.TransitionType;
 import funkin.ui.quickpanel.QuickPanelState;
 import funkin.ui.quickpanel.PanelActions;
+// import rave.util.CustomTransitionUtil;
+import rave.ui.transition.RaveTransition;
 
 class FlavorRavePanelEntry extends PanelEntry
 {
-  public function new()
-  {
-    super('flavorrave');
-  }
+	public function new()
+	{
+		super('flavorrave');
+	}
 
-  override public function onAccept():Void
-  {
-    QuickPanelState.stopMusic();
-    Transition.switchState(() -> new rave.ui.main.RaveMainState(), // at some point change this to title state
-      {
-        assetQuery: rave.ui.main.RaveMainState.queryAssets,
-        transition: TransitionType.Custom('RaveTransition', FadeType.Fade("North"), FadeType.Fade("South"))
-      });
-  }
+	override public function onAccept():Void
+	{
+		QuickPanelState.stopMusic();
+		Transition.switchState(() -> new rave.ui.main.RaveMainState(), // at some point change this to title state
+			{
+				assetQuery: rave.ui.main.RaveMainState.queryAssets,
+				transition: TransitionType.Custom('rave.ui.transition.RaveTransition', FadeType.Fade("North"), FadeType.Fade("South"))
+			});
+	}
 }
