@@ -1,6 +1,10 @@
 package rave.ui.transition;
 
+import flixel.util.FlxColor;
 import flixel.text.FlxText;
+import flixel.ui.FlxBar;
+import flixel.util.FlxTimer;
+import flixel.math.FlxMath;
 import funkin.ui.transition.loading.ThrobberLoadingState;
 import funkin.ui.transition.progress.FunkinProgressBar;
 
@@ -9,36 +13,60 @@ class RaveTransition extends ThrobberLoadingState
 	public function new(target:TransitionTarget, params:TransitionParams)
 	{
 		super(target, params, {
-			transparent: false,
-			delay: 1
+			delay: 0,
 		});
 	}
 
-	var progressBar:FunkinProgressBar;
 	var loadingText:FlxText;
 
-	override public function create()
+	override public function buildDisplay()
 	{
-		super.create();
+		super.buildDisplay();
 
-		progressBar = new FunkinProgressBar();
-		progressBar.build();
-		progressBar.cameras = [throbberCamera];
-		add(progressBar);
-        progressBar.y = FlxG.height - progressBar.height;
-
-		loadingText = new FlxText(0, 0, 0, 'Bopeebo');
-		loadingText.setFormat(funkin.assets.Paths.font('ui/fonts/FunkinOptions', 'otf'), 38, 0xFFFFFFFF, 'left');
+		loadingText = new FlxText(0, 0, 0, 'Bopeebo', 38);
+		loadingText.font = funkin.assets.Paths.font('ui/fonts/FunkinOptions', 'otf');
+		loadingText.color = FlxColor.WHITE;
+		loadingText.cameras = [throbberCamera];
 		add(loadingText);
 
-        loadingText.x = loadingText.size;
-		loadingText.y = progressBar.y - loadingText.height - loadingText.size;
+		loadingText.x = 16;
+		loadingText.y = FlxG.height - loadingText.size - 16;
 	}
 
-	override public function update(elapsed:Float):Void
+	override function startAssetLoading()
 	{
-		super.update(elapsed);
+		FlxTimer.wait((RaveGlobal.isDebugMode) ? throbberParams.delay : 0, () ->
+		{
+			super.startAssetLoading();
+		});
+		// trace('do nothing cause I am an asshole');
+	}
 
-		progressBar.updateProgress(Std.int(this.currentProgress * 10), 10);
+	override public function onProgress(a:Int, b:Int):Void
+	{
+		super.onProgress(a, b);
+		updateText();
+	}
+
+	override public function onError(a:Any):Void
+	{
+		super.onError(a);
+		updateText();
+	}
+
+	override public function onFullyComplete():Void
+	{
+        currentProgress = 100;
+		updateText();
+
+		FlxTimer.wait(1, () ->
+		{
+			super.onFullyComplete();
+		});
+	}
+
+	public function updateText()
+	{
+		if (loadingText != null) loadingText.text = '${FlxMath.roundDecimal(currentProgress * 100, 2)}% Complete';
 	}
 }
