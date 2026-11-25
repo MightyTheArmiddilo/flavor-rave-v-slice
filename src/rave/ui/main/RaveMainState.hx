@@ -10,6 +10,7 @@ import flixel.tweens.FlxEase;
 import rave.util.CoolUtil;
 import flixel.FlxG;
 import flixel.input.keyboard.FlxKey;
+import flixel.group.FlxSpriteGroup;
 import funkin.util.InputUtil;
 import funkin.group.FunkinGroup;
 
@@ -32,6 +33,7 @@ class RaveMainState extends MusicBeatState
 			'ui/rave/main-menu',
 			'ui/rave/main-menu/art',
 			'ui/rave/main-menu/SynSun/scrolltext',
+			'ui/rave/main-menu/buttons'
 		];
 		var results = [];
 
@@ -46,6 +48,15 @@ class RaveMainState extends MusicBeatState
 	var menuArt:FlxSprite;
 	var scrollText:FlxBackdrop;
 	var sidebar:FlxSprite;
+	var menuItems:FlxSpriteGroup<MMenuItem>;
+	final optionShit:Array<Array<Dynamic>> = [
+		['story', 0xFF3CFDFD, 0xFFFCFC9B],
+		['freeplay', 0xFFD1FC59, 0xFF53BE7E],
+		['fp', 0xFFAD34C2, 0xFFACE6FF],
+		['gallery', 0xFFC62121, 0xFF483646],
+		['options', 0xFF583268, 0xFFE2E75D],
+		['credits', 0xFFFF6FB0, 0xFF71E5FF]
+	];
 
 	override function create()
 	{
@@ -159,6 +170,23 @@ class RaveMainState extends MusicBeatState
 			ease: FlxEase.sineOut
 		});
 
+		menuItems = new FlxSpriteGroup<MMenuItem>();
+		add(menuItems);
+
+		for (i in 0...optionShit.length)
+		{
+			var menuItem = new MMenuItem(-452, 12 + (i * 115), optionShit[i][0]);
+			menuItem.ID = i;
+			menuItems.add(menuItem);
+
+			FlxTween.tween(menuItem, {
+				x: -10
+			}, 0.5, {
+				ease: FlxEase.sineOut,
+				startDelay: (0.1 + (0.1 * i))
+			});
+		}
+
 		var list = ['crashlog', 'mods', 'exit-mod'];
 
 		if (RaveGlobal.isDebugMode)
@@ -181,7 +209,7 @@ class RaveMainState extends MusicBeatState
 	}
 }
 
-class MMenuItem extends FunkinGroup
+class MMenuItem extends FlxSpriteGroup
 {
 	var song:String;
 	var bg:FlxSprite;
@@ -194,9 +222,26 @@ class MMenuItem extends FunkinGroup
 		super(x, y);
 
 		name = item;
+		trace('[FLAVOR RAVE] $item');
 
 		bg = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/buttons/${item}back').toString());
 		bg.antialiasing = false;
 		add(bg);
+
+		text = new FlxSprite().loadGraphic(Paths.image('ui/rave/main-menu/buttons/${item}front').toString());
+		text.antialiasing = false;
+		add(text);
+	}
+
+	public function highlighted(bool:Bool)
+	{
+		FlxTween.cancelTweensOf(text);
+		var val:Float = bool ? 1.1 : 0.9;
+		FlxTween.tween(text.scale, {
+			x: val,
+			y: val
+		}, 0.1, {
+			ease: FlxEase.sineOut
+		});
 	}
 }
