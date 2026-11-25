@@ -56,7 +56,6 @@ class RaveTransition extends ThrobberLoadingState
 
 	override public function onFullyComplete():Void
 	{
-		currentProgress = 100;
 		updateText();
 
 		super.onFullyComplete();
