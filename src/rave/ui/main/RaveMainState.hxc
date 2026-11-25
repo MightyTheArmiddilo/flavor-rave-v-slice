@@ -7,6 +7,9 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;
 import rave.util.CoolUtil;
+import flixel.FlxG;
+import flixel.input.keyboard.FlxKey;
+import funkin.util.InputUtil;
 
 class RaveMainState extends MusicBeatState
 {
@@ -156,8 +159,15 @@ class RaveMainState extends MusicBeatState
 			ease: FlxEase.sineOut
 		});
 
-		CoolUtil.createSidebarPanelsBasedOnOGS('rave', ['crashlog', 'mods', 'exit-mod'], ['chartEditor' => 0, 'cameraEditor' => 1]);
-	
+		var list = ['crashlog', 'mods', 'exit-mod'];
+
+		if (funkin.util.FileUtil.directoryExists('mods/flavor-rave-v-slice/.git'))
+		{
+			list.insert(0, 'chartEditor');
+			list.insert(1, 'cameraEditor');
+		}
+
+		CoolUtil.createSidebarPanelsBasedOnOGS('rave', list);
 		#if FEATURE_DEBUG_MENU
 		funkin.util.plugins.SidePanelPlugin.requestPanel('rave', true);
 		#end
@@ -166,7 +176,7 @@ class RaveMainState extends MusicBeatState
 	override function destroy()
 	{
 		super.destroy();
-		
+
 		CoolUtil.removeCustomSidebarPanels('rave');
 	}
 }

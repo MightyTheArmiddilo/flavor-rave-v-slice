@@ -1,10 +1,7 @@
 package rave.util;
 
-import flixel.FlxG;
-import flixel.input.keyboard.FlxKey;
 import funkin.data.quickpanel.PanelRegistry;
 import funkin.ui.quickpanel.PanelEntry;
-import funkin.util.InputUtil;
 
 using StringTools;
 
@@ -28,14 +25,8 @@ class CoolUtil
 		}
 	}
 
-	public static function createSidebarPanelsBasedOnOGS(panel:String, wanted:Array<String>, ?debugEntries:Map<String, Int>)
+	public static function createSidebarPanelsBasedOnOGS(panel:String, wanted:Array<String>)
 	{
-		// RAVE
-		if (debugEntries != null && InputUtil.allPressed([FlxKey.R, FlxKey.A, FlxKey.V, FlxKey.E,]))
-		{
-			for (entry => order in debugEntries) wanted.insert(order, entry);
-		}
-
 		@:privateAccess
 		for (entry => what in PanelRegistry.instance.entries)
 		{
