@@ -5,5 +5,5 @@
     "description": "Open Flavor Rave!",
     "action": "none",
     "panel": "mainmenu",
-    "order": 6
+    "order": -1
 }
